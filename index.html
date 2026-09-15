@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <title>Fall 2026 Assignments</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<meta name="theme-color" content="#1a73e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Assignments">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -289,6 +296,91 @@
     pointer-events: none;
     z-index: 999;
   }
+
+  .upload-btn {
+    margin-left: auto;
+    background: #1a73e8;
+    color: #fff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card-bg);
+    border-radius: 16px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 22px;
+  }
+  .modal h2 { font-size: 1.15rem; margin: 0 0 6px; font-weight: 700; }
+  .modal .modal-sub { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5; }
+  .modal textarea {
+    width: 100%;
+    min-height: 160px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--bg);
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .modal-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .modal-btn.primary { background: #1a73e8; color: #fff; }
+  .modal-btn.secondary { background: var(--border); color: var(--text); }
+  .modal-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .modal-status { font-size: 0.85rem; margin-top: 12px; }
+  .modal-status.error { color: #d93025; }
+  .modal-status.loading { color: var(--text-soft); }
+
+  .preview-list { margin-top: 14px; }
+  .preview-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .preview-item input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; }
+  .preview-item .pi-title { font-size: 0.88rem; font-weight: 500; }
+  .preview-item .pi-meta { font-size: 0.75rem; color: var(--text-soft); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -299,6 +391,7 @@
     <h1>Fall 2026 Assignments</h1>
     <div class="sub">4 classes · every due date in one place</div>
   </div>
+  <button class="upload-btn" id="openUploadBtn">+ Add Syllabus</button>
 </div>
 <div class="wrap">
   <div class="filters" id="filters"></div>
@@ -309,6 +402,24 @@
   </div>
 
   <div class="timeline" id="list"></div>
+</div>
+
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <h2>Add a syllabus</h2>
+    <div class="modal-sub">Paste the syllabus text below. The AI will read it and pull out every assignment and due date.</div>
+    <textarea id="syllabusInput" placeholder="Paste your syllabus text here..."></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="cancelUploadBtn">Cancel</button>
+      <button class="modal-btn primary" id="parseUploadBtn">Parse Syllabus</button>
+    </div>
+    <div id="modalStatus"></div>
+    <div class="preview-list" id="previewList"></div>
+    <div class="modal-actions" id="confirmActions" style="display:none">
+      <button class="modal-btn secondary" id="discardPreviewBtn">Discard</button>
+      <button class="modal-btn primary" id="addPreviewBtn">Add Selected</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -357,12 +468,27 @@ const assignments = [
   {id:"aes14", date:"2026-12-15", class:"Aesthetics", title:"Final Exam", time:"class time", desc:"In-class final exam, same format as the midterm."}
 ];
 
-const classColors = {
-  "Visual Merchandising": "var(--vm)",
-  "Aesthetics": "var(--aes)",
-  "Digital Addiction": "var(--da)",
-  "Thesis 1": "var(--th)"
+const defaultAssignments = assignments;
+
+const knownClassColors = {
+  "Visual Merchandising": "#ea4335",
+  "Aesthetics": "#a142f4",
+  "Digital Addiction": "#12b5cb",
+  "Thesis 1": "#fbbc04"
 };
+const extraPalette = ["#e67c73","#33b679","#8e24aa","#3f51b5","#0b8043","#d50000","#f4511e","#039be5","#c2185b","#00897b"];
+function getClassColor(cls) {
+  if (knownClassColors[cls]) return knownClassColors[cls];
+  let hash = 0;
+  for (let i = 0; i < cls.length; i++) hash = cls.charCodeAt(i) + ((hash << 5) - hash);
+  return extraPalette[Math.abs(hash) % extraPalette.length];
+}
+
+let customAssignments = [];
+try { customAssignments = JSON.parse(localStorage.getItem("customAssignments") || "[]"); } catch(e) { customAssignments = []; }
+function saveCustomAssignments() { try { localStorage.setItem("customAssignments", JSON.stringify(customAssignments)); } catch(e) {} }
+function getAllAssignments() { return [...defaultAssignments, ...customAssignments]; }
+function getAllClasses() { return [...new Set(getAllAssignments().map(a => a.class))]; }
 
 let state = {};
 try { state = JSON.parse(localStorage.getItem("assignmentState") || "{}"); } catch(e) { state = {}; }
@@ -375,8 +501,6 @@ function fmtDate(d) {
   const dt = new Date(d + "T00:00:00");
   return dt.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 }
-
-const filterColors = { "All": "#1a73e8", ...classColors };
 
 function getTodayStr() {
   const d = new Date();
@@ -402,10 +526,12 @@ function todayMarkerHTML() {
 }
 
 function render() {
-  const filters = ["All", ...Object.keys(classColors)];
+  const allAssignments = getAllAssignments();
+  const classes = getAllClasses();
+  const filters = ["All", ...classes];
   const filterEl = document.getElementById("filters");
   filterEl.innerHTML = filters.map(f => {
-    const color = filterColors[f];
+    const color = f === "All" ? "#1a73e8" : getClassColor(f);
     const active = f === activeFilter;
     return `<button class="filter-btn ${active?'active':''}" data-f="${f}" style="${active ? `background:${color};` : ''}">
       <span class="dot" style="background:${color}"></span>${f}
@@ -415,7 +541,7 @@ function render() {
     btn.onclick = () => { activeFilter = btn.dataset.f; render(); };
   });
 
-  const filtered = activeFilter === "All" ? assignments : assignments.filter(a => a.class === activeFilter);
+  const filtered = activeFilter === "All" ? allAssignments : allAssignments.filter(a => a.class === activeFilter);
   const total = filtered.length;
   const doneCount = filtered.filter(a => state[a.id]?.complete).length;
   const pct = total ? Math.round((doneCount/total)*100) : 0;
@@ -444,10 +570,10 @@ function render() {
       const s = state[a.id] || {};
       const isOpen = openId === a.id;
       return `
-        <div class="card" data-id="${a.id}" style="--accent:${classColors[a.class]}">
+        <div class="card" data-id="${a.id}" style="--accent:${getClassColor(a.class)}">
           <div class="card-top">
             <div class="card-left">
-              <span class="tag" style="background:${classColors[a.class]}">${a.class}</span>
+              <span class="tag" style="background:${getClassColor(a.class)}">${a.class}</span>
               <div class="title">${a.title}</div>
               <div class="time">${a.time}</div>
             </div>
@@ -468,7 +594,7 @@ function render() {
     }).join("");
 
     const isLast = i === dates.length - 1;
-    const nodeColor = classColors[grouped[date][0].class];
+    const nodeColor = getClassColor(grouped[date][0].class);
     html += `
       <div class="date-row" ${isLast && todayPlaced ? 'style="padding-bottom:0"' : ''}>
         <div class="date-rail">
@@ -572,6 +698,96 @@ function tick() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 }
+
+/* ---- syllabus upload ---- */
+
+// Replace this with your deployed Cloudflare Worker URL, e.g.
+// "https://syllabus-parser.yourname.workers.dev"
+const WORKER_URL = "PASTE_YOUR_WORKER_URL_HERE";
+
+const uploadModal = document.getElementById("uploadModal");
+const syllabusInput = document.getElementById("syllabusInput");
+const modalStatus = document.getElementById("modalStatus");
+const previewList = document.getElementById("previewList");
+const confirmActions = document.getElementById("confirmActions");
+const parseBtn = document.getElementById("parseUploadBtn");
+let pendingAssignments = [];
+
+function openModal() {
+  uploadModal.classList.add("open");
+  syllabusInput.value = "";
+  modalStatus.innerHTML = "";
+  previewList.innerHTML = "";
+  confirmActions.style.display = "none";
+  pendingAssignments = [];
+  parseBtn.style.display = "block";
+}
+function closeModal() { uploadModal.classList.remove("open"); }
+
+document.getElementById("openUploadBtn").onclick = openModal;
+document.getElementById("cancelUploadBtn").onclick = closeModal;
+document.getElementById("discardPreviewBtn").onclick = closeModal;
+
+parseBtn.onclick = async () => {
+  const text = syllabusInput.value.trim();
+  if (text.length < 30) {
+    modalStatus.innerHTML = `<div class="modal-status error">Paste in more of the syllabus first.</div>`;
+    return;
+  }
+  if (!WORKER_URL || WORKER_URL === "PASTE_YOUR_WORKER_URL_HERE") {
+    modalStatus.innerHTML = `<div class="modal-status error">The AI backend isn't set up yet. Deploy the Worker and paste its URL into WORKER_URL in the code.</div>`;
+    return;
+  }
+  modalStatus.innerHTML = `<div class="modal-status loading">Reading your syllabus...</div>`;
+  parseBtn.disabled = true;
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ syllabusText: text })
+    });
+    const data = await resp.json();
+    if (!resp.ok || data.error) {
+      modalStatus.innerHTML = `<div class="modal-status error">${data.error || "Something went wrong."}</div>`;
+      parseBtn.disabled = false;
+      return;
+    }
+    pendingAssignments = data.assignments || [];
+    if (pendingAssignments.length === 0) {
+      modalStatus.innerHTML = `<div class="modal-status error">No assignments found. Try pasting more of the syllabus.</div>`;
+      parseBtn.disabled = false;
+      return;
+    }
+    modalStatus.innerHTML = `<div class="modal-status">Found ${pendingAssignments.length} assignments. Uncheck any you don't want, then add.</div>`;
+    previewList.innerHTML = pendingAssignments.map((a, i) => `
+      <div class="preview-item">
+        <input type="checkbox" checked data-idx="${i}" id="pi-${i}">
+        <label for="pi-${i}">
+          <div class="pi-title">${a.title}</div>
+          <div class="pi-meta">${a.class} · ${a.date} · ${a.time || ""}</div>
+        </label>
+      </div>
+    `).join("");
+    confirmActions.style.display = "flex";
+    parseBtn.style.display = "none";
+  } catch (e) {
+    modalStatus.innerHTML = `<div class="modal-status error">Couldn't reach the AI backend. Check your Worker URL and that it's deployed.</div>`;
+  }
+  parseBtn.disabled = false;
+};
+
+document.getElementById("addPreviewBtn").onclick = () => {
+  const checked = [...previewList.querySelectorAll("input[type=checkbox]:checked")]
+    .map(cb => parseInt(cb.dataset.idx));
+  const toAdd = pendingAssignments
+    .filter((a, i) => checked.includes(i))
+    .map((a, i) => ({ ...a, id: "custom-" + Date.now() + "-" + i }));
+  customAssignments = [...customAssignments, ...toAdd];
+  saveCustomAssignments();
+  closeModal();
+  render();
+};
 </script>
 </body>
 </html>
