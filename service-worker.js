@@ -1,4 +1,4 @@
-const CACHE_NAME = "fall2026-assignments-v1";
+const CACHE_NAME = "fall2026-assignments-v4";
 const FILES_TO_CACHE = [
   "./",
   "./index.html",

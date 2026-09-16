@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-palette="blue" data-header-mode="adaptive">
 <head>
 <meta charset="UTF-8">
 <title>Fall 2026 Assignments</title>
@@ -7,381 +7,13 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<meta name="theme-color" content="#1a73e8">
+<meta name="theme-color" content="#2459F6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Assignments">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f6f8fc;
-    --card-bg: #ffffff;
-    --text: #202124;
-    --text-soft: #5f6368;
-    --border: #e3e6ea;
-    --done: #1e8e3e;
-    --done-bg: #e6f4ea;
-    --turned: #1a73e8;
-    --turned-bg: #e8f0fe;
-    --vm: #ea4335;
-    --aes: #a142f4;
-    --da: #12b5cb;
-    --th: #fbbc04;
-    --sans: 'Roboto', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  }
-  :root:not([data-theme="light"]) {
-    @media (prefers-color-scheme: dark) {
-      --bg: #16181d;
-      --card-bg: #212327;
-      --text: #e8eaed;
-      --text-soft: #9aa0a6;
-      --border: #35373b;
-      --done-bg: #16281c;
-      --turned-bg: #142236;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #16181d;
-    --card-bg: #212327;
-    --text: #e8eaed;
-    --text-soft: #9aa0a6;
-    --border: #35373b;
-    --done-bg: #16281c;
-    --turned-bg: #142236;
-  }
-
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    padding: 0 0 100px;
-    -webkit-font-smoothing: antialiased;
-  }
-  .topbar {
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border);
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .topbar-badge {
-    width: 34px; height: 34px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--vm), var(--th));
-    flex-shrink: 0;
-  }
-  .topbar h1 { font-size: 1.15rem; font-weight: 700; margin: 0; }
-  .topbar .sub { font-size: 0.78rem; color: var(--text-soft); margin-top: 1px; }
-
-  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 24px 0; }
-
-  @media (min-width: 1100px) {
-    .wrap { max-width: 960px; padding: 40px 32px 0; }
-    .topbar { padding: 22px 32px; }
-    .topbar h1 { font-size: 1.3rem; }
-    .topbar .sub { font-size: 0.85rem; }
-    .date-heading { font-size: 1.05rem; }
-    .title { font-size: 1.02rem; }
-    .card { padding: 16px 18px; }
-  }
-
-  @media (max-width: 520px) {
-    body { padding-bottom: 60px; }
-    .topbar { padding: 14px 16px; gap: 10px; }
-    .topbar-badge { width: 28px; height: 28px; }
-    .topbar h1 { font-size: 1rem; }
-    .topbar .sub { font-size: 0.72rem; }
-    .wrap { padding: 18px 14px 0; }
-    .filters { gap: 6px; margin-bottom: 16px; }
-    .filter-btn { padding: 6px 12px 6px 9px; font-size: 0.76rem; }
-    .progress-wrap { padding: 13px 14px; margin-bottom: 20px; border-radius: 12px; }
-    .date-row, .today-marker-row { gap: 10px; }
-    .date-rail, .today-marker-rail { width: 16px; }
-    .date-node.is-today, .today-marker-node { width: 15px; height: 15px; }
-    .date-heading { font-size: 0.88rem; }
-    .today-chip { font-size: 0.62rem; padding: 2px 8px; margin-left: 6px; }
-    .today-marker-label { font-size: 0.85rem; }
-    .card { padding: 12px 12px; border-radius: 10px; }
-    .card-top { flex-direction: column; gap: 8px; }
-    .status-pills { flex-direction: row; align-items: flex-start; width: 100%; }
-    .title { font-size: 0.9rem; }
-    .tag { font-size: 0.64rem; padding: 3px 8px; }
-    .actions { flex-direction: column; }
-  }
-
-  .filters {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    margin: 0 0 20px;
-  }
-  .filter-btn {
-    border: 1.5px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text-soft);
-    padding: 7px 14px 7px 10px;
-    border-radius: 100px;
-    font-size: 0.82rem;
-    font-family: var(--sans);
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    transition: all 0.15s;
-  }
-  .filter-btn .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  .filter-btn.active { color: #fff; border-color: transparent; }
-  .filter-btn.active .dot { background: #fff !important; }
-
-  .progress-wrap {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 18px;
-    margin-bottom: 26px;
-  }
-  .progress-label {
-    display: flex; justify-content: space-between;
-    font-size: 0.85rem; color: var(--text-soft); margin-bottom: 9px;
-  }
-  .progress-label b { color: var(--text); font-weight: 700; }
-  .progress-track {
-    height: 8px; background: var(--border); border-radius: 8px; overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%; background: linear-gradient(90deg, #1a73e8, #12b5cb); border-radius: 8px;
-    transition: width 0.3s ease;
-  }
-
-  .timeline { position: relative; }
-
-  .date-row { display: flex; gap: 16px; }
-  .date-rail { width: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-  .date-node { width: 11px; height: 11px; border-radius: 50%; background: #1a73e8; margin-top: 10px; flex-shrink: 0; border: 2px solid var(--card-bg); box-shadow: 0 0 0 1.5px #1a73e8; }
-  .date-line { flex: 1; width: 2px; background: var(--border); margin-top: 6px; }
-  .date-row:last-child .date-line { background: transparent; }
-
-  .date-content { flex: 1; min-width: 0; padding-bottom: 22px; }
-  .date-heading {
-    font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 10px;
-    color: var(--text);
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-top: 4px solid var(--accent, #1a73e8);
-    border-radius: 12px;
-    padding: 13px 15px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.08), 0 1px 3px rgba(60,64,67,0.06);
-  }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-  .card-left { flex: 1; min-width: 0; }
-  .tag {
-    display: inline-block;
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 3px 9px;
-    border-radius: 5px;
-    margin-bottom: 7px;
-    color: #fff;
-  }
-  .title { font-size: 0.96rem; font-weight: 500; line-height: 1.35; }
-  .time { font-size: 0.8rem; color: var(--text-soft); margin-top: 3px; }
-
-  .status-pills { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; align-items: flex-end; }
-  .pill {
-    font-size: 0.68rem;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    color: var(--text-soft);
-    white-space: nowrap;
-  }
-  .pill.on.complete { background: var(--done-bg); color: var(--done); border-color: transparent; font-weight: 700; }
-  .pill.on.turned { background: var(--turned-bg); color: var(--turned); border-color: transparent; font-weight: 700; }
-
-  .details {
-    display: none;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    font-size: 0.87rem;
-    color: var(--text-soft);
-    line-height: 1.55;
-  }
-  .details.open { display: block; }
-  .actions { display: flex; gap: 8px; margin-top: 14px; }
-  .action-btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    font-size: 0.8rem;
-    font-weight: 500;
-    font-family: var(--sans);
-    cursor: pointer;
-  }
-  .action-btn.complete.on { background: var(--done); color: #fff; border-color: transparent; }
-  .action-btn.turned.on { background: var(--turned); color: #fff; border-color: transparent; }
-
-  .date-node.is-today {
-    width: 20px; height: 20px;
-    margin-top: 0;
-    background: #111827;
-    box-shadow: 0 0 0 2px #111827;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 2px #111827, 0 0 0 0 rgba(17,24,39,0.45); }
-    70% { box-shadow: 0 0 0 2px #111827, 0 0 0 12px rgba(17,24,39,0); }
-    100% { box-shadow: 0 0 0 2px #111827, 0 0 0 0 rgba(17,24,39,0); }
-  }
-  .today-chip {
-    display: inline-block;
-    background: #111827;
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 3px 11px;
-    border-radius: 100px;
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-
-  .today-marker-row { display: flex; gap: 16px; }
-  .today-marker-rail { width: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-  .today-marker-node {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #111827; margin-top: 4px; flex-shrink: 0;
-    border: 3px solid var(--bg);
-    animation: pulse 2s infinite;
-  }
-  .today-marker-line { flex: 1; width: 2px; background: var(--border); margin-top: 6px; }
-  .today-marker-content {
-    flex: 1; display: flex; align-items: center;
-    padding-bottom: 26px;
-  }
-  .today-marker-label {
-    color: #111827;
-    font-weight: 900;
-    font-size: 1.05rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    letter-spacing: -0.01em;
-  }
-  .today-marker-label::after {
-    content: '';
-    flex: 1;
-    height: 2px;
-    background: repeating-linear-gradient(90deg, #111827, #111827 5px, transparent 5px, transparent 10px);
-  }
-
-  canvas#confetti {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 999;
-  }
-
-  .upload-btn {
-    margin-left: auto;
-    background: #1a73e8;
-    color: #fff;
-    border: none;
-    padding: 9px 16px;
-    border-radius: 100px;
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: 0.85rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--card-bg);
-    border-radius: 16px;
-    max-width: 560px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 22px;
-  }
-  .modal h2 { font-size: 1.15rem; margin: 0 0 6px; font-weight: 700; }
-  .modal .modal-sub { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5; }
-  .modal textarea {
-    width: 100%;
-    min-height: 160px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    font-family: var(--sans);
-    font-size: 0.88rem;
-    color: var(--text);
-    background: var(--bg);
-    resize: vertical;
-    box-sizing: border-box;
-  }
-  .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
-  .modal-btn {
-    flex: 1;
-    padding: 11px;
-    border-radius: 8px;
-    border: none;
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: 0.88rem;
-    cursor: pointer;
-  }
-  .modal-btn.primary { background: #1a73e8; color: #fff; }
-  .modal-btn.secondary { background: var(--border); color: var(--text); }
-  .modal-btn:disabled { opacity: 0.5; cursor: default; }
-
-  .modal-status { font-size: 0.85rem; margin-top: 12px; }
-  .modal-status.error { color: #d93025; }
-  .modal-status.loading { color: var(--text-soft); }
-
-  .preview-list { margin-top: 14px; }
-  .preview-item {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .preview-item input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; }
-  .preview-item .pi-title { font-size: 0.88rem; font-weight: 500; }
-  .preview-item .pi-meta { font-size: 0.75rem; color: var(--text-soft); margin-top: 2px; }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <canvas id="confetti"></canvas>
@@ -389,9 +21,23 @@
   <div class="topbar-badge"></div>
   <div>
     <h1>Fall 2026 Assignments</h1>
-    <div class="sub">4 classes · every due date in one place</div>
+    <div class="sub" id="topbarSub">Every due date in one place</div>
   </div>
   <button class="upload-btn" id="openUploadBtn">+ Add Syllabus</button>
+  <div class="customize-wrap">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Customize" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="customize-panel" id="customizePanel">
+      <div class="customize-title">Customize</div>
+
+      <div class="customize-section-label">Header Color</div>
+      <div class="palette-swatches" id="paletteSwatches"></div>
+
+      <div class="customize-section-label">Class Colors</div>
+      <div class="class-color-list" id="classColorList"></div>
+    </div>
+  </div>
 </div>
 <div class="wrap">
   <div class="filters" id="filters"></div>
@@ -407,7 +53,13 @@
 <div class="modal-overlay" id="uploadModal">
   <div class="modal">
     <h2>Add a syllabus</h2>
-    <div class="modal-sub">Paste the syllabus text below. The AI will read it and pull out every assignment and due date.</div>
+    <div class="modal-sub">Drop a PDF or text file, or paste the text directly. The AI will read it and pull out every assignment and due date.</div>
+    <div class="dropzone" id="dropzone">
+      <div class="dropzone-icon">📄</div>
+      <div class="dropzone-text"><strong>Drop your syllabus here</strong><br>PDF or .txt files (one or more) — or click to choose</div>
+      <input type="file" id="fileInput" accept=".pdf,.txt,text/plain,application/pdf" multiple style="display:none">
+    </div>
+    <div class="or-divider">or paste the text below</div>
     <textarea id="syllabusInput" placeholder="Paste your syllabus text here..."></textarea>
     <div class="modal-actions">
       <button class="modal-btn secondary" id="cancelUploadBtn">Cancel</button>
@@ -422,53 +74,17 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script>
-const assignments = [
-  {id:"vm1", date:"2026-09-02", class:"Visual Merchandising", title:"Journal #1: Traffic Patterns", time:"12pm", desc:"Upload your Journal assignment on Traffic Patterns to the discussion board before class time."},
-  {id:"da1", date:"2026-09-02", class:"Digital Addiction", title:"Assignment 1: 24-Hour Digital Use Log", time:"11:30pm", desc:"Log every digital device use for 24 consecutive hours (time, device, reason, your own categories). Turn it into a visual postcard + key, Dear Data style. Bring a copy to class. Note: syllabus text says due before class on Sept 9, but Canvas lists this due date. Worth confirming which is correct."},
-  {id:"th1", date:"2026-09-03", class:"Thesis 1", title:"Choose First Prototype", time:"in class", desc:"Choose your first prototype direction based on your research questions."},
-  {id:"th2", date:"2026-09-08", class:"Thesis 1", title:"Blog Post 1: Intro Post", time:"in class", desc:"First blog post. Intro, dream life as an artist (vision board), what you want to make work about, timeline of 3-5 past projects."},
-  {id:"aes1", date:"2026-09-15", class:"Aesthetics", title:"Response Paper #1: Hegel and Symbolic Art", time:"10am", desc:"300-word response + ~50 word discussion question on this week's Hegel reading. Submit to your TA on Canvas before 10am. No late work accepted."},
-  {id:"vm2", date:"2026-09-16", class:"Visual Merchandising", title:"Presentation of Color and Composition", time:"12pm", desc:"Group assignment presenting on color and composition."},
-  {id:"da2", date:"2026-09-16", class:"Digital Addiction", title:"Assignment 2: 24-Hour Phone Fast", time:"before class", desc:"Stop using your phone for 24 consecutive hours. Keep a written log or postcard. Submit a 500-word reflection connecting it to readings on craving, choice, and the disease model of addiction."},
-  {id:"th3", date:"2026-09-17", class:"Thesis 1", title:"1st Prototype", time:"in class", desc:"First prototype due for internal playtest."},
-  {id:"aes2", date:"2026-09-22", class:"Aesthetics", title:"Response Paper #2: Hegel and Classical Art", time:"10am", desc:"300-word response + discussion question on classical art / Hegel reading."},
-  {id:"vm3", date:"2026-09-23", class:"Visual Merchandising", title:"Super Incisive Brand Identity Assignment", time:"11:59pm", desc:"Brand identity assignment."},
-  {id:"da3", date:"2026-09-23", class:"Digital Addiction", title:"Assignment 3: Monetizing Addiction", time:"in class", desc:"In-class screening (Web Junkie, The Social Dilemma excerpts) and assignment, details TBA."},
-  {id:"aes3", date:"2026-09-29", class:"Aesthetics", title:"Response Paper #3: Plato's Cave", time:"10am", desc:"300-word response + discussion question on Plato's Republic Book 7 / Cave of Forgotten Dreams."},
-  {id:"vm4", date:"2026-09-30", class:"Visual Merchandising", title:"Journal #2: Conveying the Brand Identity", time:"12pm", desc:"Upload your journal assignment on Conveying the Brand Identity."},
-  {id:"da4", date:"2026-09-30", class:"Digital Addiction", title:"Assignment 4: Participant Observation", time:"in class", desc:"Observe digital-device use in a public place for 30-40 min. Submit a 300-500 word fieldnote-based reflection."},
-  {id:"th4", date:"2026-10-01", class:"Thesis 1", title:"2nd Prototype", time:"in class", desc:"Second prototype due, playtest with other Games section."},
-  {id:"aes4", date:"2026-10-06", class:"Aesthetics", title:"Met Museum Visit (no response due)", time:"class time", desc:"No lecture this week. Visit the Metropolitan Museum of Art with your section. No response paper due."},
-  {id:"da5", date:"2026-10-07", class:"Digital Addiction", title:"Midterm", time:"11:59pm", desc:"Midterm exam, written in class."},
-  {id:"aes5", date:"2026-10-13", class:"Aesthetics", title:"Response Paper #4: Hegel on Painting", time:"10am", desc:"300-word response + discussion question on maternal love and Christian painting."},
-  {id:"vm5", date:"2026-10-14", class:"Visual Merchandising", title:"Journal #3: Wall Displays", time:"12pm", desc:"Upload your journal assignment on wall displays."},
-  {id:"th5", date:"2026-10-15", class:"Thesis 1", title:"3rd Prototype", time:"in class", desc:"Third prototype due, playtest with Games section + midterm discussion."},
-  {id:"aes6", date:"2026-10-20", class:"Aesthetics", title:"Response Paper #5: Hegel and Modernism", time:"10am", desc:"300-word response + discussion question on modernism, abstract painting, ready-mades."},
-  {id:"th6", date:"2026-10-20", class:"Thesis 1", title:"Midterm Presentation + Deliverables", time:"in class", desc:"Present progress so far, submit slides and a PDF documenting research and prototyping work."},
-  {id:"vm6", date:"2026-10-21", class:"Visual Merchandising", title:"Midterm", time:"12pm", desc:"Midterm given in class only, not online."},
-  {id:"da6", date:"2026-10-21", class:"Digital Addiction", title:"Assignment 5 & 6: Attention Audit / Media Time Capsule", time:"before class / in class", desc:"Attention Audit: pull weekly screen time, calculate a dollar value for your attention, respond in 300-500 words. Media Time Capsule: find a historical moral panic about media and respond in 300-500 words. Note: syllabus text says Oct 21 but the week header says Oct 23 — worth confirming with your professor."},
-  {id:"aes7", date:"2026-10-27", class:"Aesthetics", title:"Midterm Exam", time:"class time", desc:"In-class midterm, blue books, pen and paper only, no devices or extra materials."},
-  {id:"vm7", date:"2026-10-28", class:"Visual Merchandising", title:"Unique and Exciting Boutique Assignment", time:"12pm", desc:"Boutique assignment."},
-  {id:"aes8", date:"2026-11-03", class:"Aesthetics", title:"Response Paper #6: Aristotle and Tragedy", time:"10am", desc:"300-word response + discussion question on Aristotle's Poetics / tragedy."},
-  {id:"da7", date:"2026-11-04", class:"Digital Addiction", title:"Assignment 7: Landline Phone Call", time:"before class", desc:"Make a call from a landline, ideally a public phone booth. Take a photo, write a 300-500 word response."},
-  {id:"aes9", date:"2026-11-10", class:"Aesthetics", title:"Response Paper #7: Shakespeare", time:"10am", desc:"300-word response + discussion question on Hamlet."},
-  {id:"vm8", date:"2026-11-11", class:"Visual Merchandising", title:"Fashion Display Window Group Presentation", time:"12pm", desc:"Group presentation of your own creation for a fashion display window for a real brand."},
-  {id:"da8", date:"2026-11-11", class:"Digital Addiction", title:"Assignment 8: Host a Party Like It's 1996", time:"before class", desc:"Host a gathering without digital devices. No streaming music, no delivery apps. Take photos on disposable camera, write a 300-500 word reflection."},
-  {id:"aes10", date:"2026-11-17", class:"Aesthetics", title:"Response Paper #8: Adorno / Bach / Music", time:"10am", desc:"300-word response + discussion question on Adorno's Bach essay and Glenn Gould."},
-  {id:"da9", date:"2026-11-18", class:"Digital Addiction", title:"Assignment 9: Scaling Addiction", time:"in class", desc:"Details TBA, due in class."},
-  {id:"aes11", date:"2026-11-24", class:"Aesthetics", title:"Response Paper #9: Adorno and Jazz", time:"10am", desc:"300-word response + discussion question on Adorno's Jazz / Homage to Zerlina."},
-  {id:"aes12", date:"2026-12-01", class:"Aesthetics", title:"Response Paper #10: Departures", time:"10am", desc:"300-word response + discussion question on the film Departures."},
-  {id:"th7", date:"2026-12-01", class:"Thesis 1", title:"Final Presentation + Deliverables", time:"in class", desc:"Final presentation, slides, and final written design brief."},
-  {id:"vm9", date:"2026-12-02", class:"Visual Merchandising", title:"Final Group Presentation (1st half)", time:"12pm", desc:"Submit first half of final group presentation."},
-  {id:"da10", date:"2026-12-02", class:"Digital Addiction", title:"Assignment 10: Final Presentation", time:"in class", desc:"Final presentation due in class."},
-  {id:"aes13", date:"2026-12-08", class:"Aesthetics", title:"Response Papers #11 & #12", time:"10am", desc:"Two responses on Underground Railroad and Get Out, plus optional bonus response on Kant."},
-  {id:"vm10", date:"2026-12-09", class:"Visual Merchandising", title:"Final Project", time:"12pm", desc:"Complete final project posted to Discussions, with any revisions from first half. You will present it."},
-  {id:"da11", date:"2026-12-09", class:"Digital Addiction", title:"Final Project: Fieldwork Album", time:"11:30pm", desc:"Upload your final album and reflection to Canvas."},
-  {id:"aes14", date:"2026-12-15", class:"Aesthetics", title:"Final Exam", time:"class time", desc:"In-class final exam, same format as the midterm."}
-];
-
-const defaultAssignments = assignments;
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+  }
+</script>
+<script>
+// Ships empty — this is a blank slate for whoever installs the app.
+// Add your own semester through the "+ Add Syllabus" button, which saves
+// everything to this device's local storage (see customAssignments below).
+const defaultAssignments = [];
 
 const knownClassColors = {
   "Visual Merchandising": "#ea4335",
@@ -477,7 +93,13 @@ const knownClassColors = {
   "Thesis 1": "#fbbc04"
 };
 const extraPalette = ["#e67c73","#33b679","#8e24aa","#3f51b5","#0b8043","#d50000","#f4511e","#039be5","#c2185b","#00897b"];
+
+let classColorOverrides = {};
+try { classColorOverrides = JSON.parse(localStorage.getItem("classColorOverrides") || "{}"); } catch(e) { classColorOverrides = {}; }
+function saveClassColorOverrides() { try { localStorage.setItem("classColorOverrides", JSON.stringify(classColorOverrides)); } catch(e) {} }
+
 function getClassColor(cls) {
+  if (classColorOverrides[cls]) return classColorOverrides[cls];
   if (knownClassColors[cls]) return knownClassColors[cls];
   let hash = 0;
   for (let i = 0; i < cls.length; i++) hash = cls.charCodeAt(i) + ((hash << 5) - hash);
@@ -493,6 +115,12 @@ function getAllClasses() { return [...new Set(getAllAssignments().map(a => a.cla
 let state = {};
 try { state = JSON.parse(localStorage.getItem("assignmentState") || "{}"); } catch(e) { state = {}; }
 function saveState() { try { localStorage.setItem("assignmentState", JSON.stringify(state)); } catch(e) {} }
+
+const ARCHIVE_AFTER_MS = 24 * 60 * 60 * 1000; // move to Completed 24h after marking complete
+function isArchived(a) {
+  const s = state[a.id];
+  return !!(s && s.complete && s.completedAt && (Date.now() - s.completedAt > ARCHIVE_AFTER_MS));
+}
 
 let activeFilter = "All";
 let openId = null;
@@ -549,12 +177,33 @@ function render() {
   document.getElementById("progressPct").textContent = `${pct}%`;
   document.getElementById("progressFill").style.width = pct + "%";
 
+  const topbarSub = document.getElementById("topbarSub");
+  topbarSub.textContent = classes.length
+    ? `${classes.length} class${classes.length > 1 ? "es" : ""} · every due date in one place`
+    : "Add a syllabus to get started";
+
+  const listEl = document.getElementById("list");
+
+  if (allAssignments.length === 0) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">🗓️</div>
+        <div class="empty-state-title">No assignments yet</div>
+        <div class="empty-state-text">Tap "+ Add Syllabus" above to upload your first one — drop in a PDF or paste the text, and it'll pull out every due date automatically.</div>
+      </div>
+    `;
+    renderCustomizePanel();
+    return;
+  }
+
+  const activeItems = filtered.filter(a => !isArchived(a));
+  const archivedItems = filtered.filter(a => isArchived(a));
+
   const grouped = {};
-  filtered.forEach(a => { (grouped[a.date] ||= []).push(a); });
+  activeItems.forEach(a => { (grouped[a.date] ||= []).push(a); });
   const dates = Object.keys(grouped).sort();
   const todayStr = getTodayStr();
 
-  const listEl = document.getElementById("list");
   let html = "";
   let todayPlaced = false;
 
@@ -611,7 +260,49 @@ function render() {
 
   if (!todayPlaced) html += todayMarkerHTML();
 
+  if (archivedItems.length > 0) {
+    const sorted = [...archivedItems].sort((a, b) => (state[b.id].completedAt || 0) - (state[a.id].completedAt || 0));
+    html += `
+      <div class="completed-section">
+        <button class="completed-toggle" id="completedToggle">
+          <span>✓ Completed (${archivedItems.length})</span>
+          <span class="chevron" id="completedChevron">▾</span>
+        </button>
+        <div class="completed-list" id="completedList" style="display:none">
+          ${sorted.map(a => `
+            <div class="completed-item">
+              <span class="tag" style="background:${getClassColor(a.class)}">${a.class}</span>
+              <div class="completed-item-title">${a.title}</div>
+              <div class="completed-item-date">${fmtDate(a.date)}</div>
+              <button class="undo-btn" data-id="${a.id}">Undo</button>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+
   listEl.innerHTML = html;
+
+  const completedToggle = document.getElementById("completedToggle");
+  if (completedToggle) {
+    completedToggle.addEventListener("click", () => {
+      const list = document.getElementById("completedList");
+      const chev = document.getElementById("completedChevron");
+      const isOpen = list.style.display !== "none";
+      list.style.display = isOpen ? "none" : "block";
+      chev.textContent = isOpen ? "▾" : "▴";
+    });
+  }
+  listEl.querySelectorAll(".undo-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      if (state[id]) { state[id].complete = false; state[id].completedAt = null; }
+      saveState();
+      render();
+    });
+  });
 
   listEl.querySelectorAll(".card").forEach(card => {
     card.addEventListener("click", (e) => {
@@ -629,12 +320,105 @@ function render() {
       if (!state[id]) state[id] = {};
       const turningOn = !state[id][action];
       state[id][action] = turningOn;
+      if (action === "complete") {
+        state[id].completedAt = turningOn ? Date.now() : null;
+      }
       saveState();
       if (action === "turned" && turningOn) launchConfetti();
       render();
     });
   });
+
+  renderCustomizePanel();
 }
+
+/* ---- customize: header palette + per-class colors ---- */
+
+// Each palette's light/dark header fill + readable text color on top of it.
+const PALETTE_OPTIONS = [
+  { id: "red", label: "Red", light: "#E5383B", lightInk: "#FFFFFF", dark: "#FF9B9B", darkInk: "#171914" },
+  { id: "orange", label: "Orange", light: "#FF822E", lightInk: "#171914", dark: "#FFB98A", darkInk: "#171914" },
+  { id: "amber", label: "Amber", light: "#E8A400", lightInk: "#171914", dark: "#FFE08A", darkInk: "#171914" },
+  { id: "green", label: "Green", light: "#1E8E3E", lightInk: "#FFFFFF", dark: "#9FE6B3", darkInk: "#171914" },
+  { id: "teal", label: "Teal", light: "#08766B", lightInk: "#FFFFFF", dark: "#79DAC6", darkInk: "#171914" },
+  { id: "blue", label: "Blue", light: "#2459F6", lightInk: "#FFFFFF", dark: "#A2BEFF", darkInk: "#171914" },
+  { id: "violet", label: "Violet", light: "#7447DB", lightInk: "#FFFFFF", dark: "#C1A3FF", darkInk: "#171914" },
+  { id: "pink", label: "Pink", light: "#D6336C", lightInk: "#FFFFFF", dark: "#FFB3D1", darkInk: "#171914" }
+];
+
+function getSavedPaletteId() {
+  try { return localStorage.getItem("posterPalette") || "blue"; } catch(e) { return "blue"; }
+}
+function savePaletteId(id) {
+  try { localStorage.setItem("posterPalette", id); } catch(e) {}
+}
+
+// Set the actual header colors as inline custom properties on <html>.
+// Inline style beats every stylesheet rule regardless of selector specificity,
+// so this is guaranteed to take effect no matter what else the CSS does.
+function applyPalette(id) {
+  const opt = PALETTE_OPTIONS.find(p => p.id === id) || PALETTE_OPTIONS[0];
+  const root = document.documentElement.style;
+  root.setProperty("--poster-header-day", opt.light);
+  root.setProperty("--poster-header-day-ink", opt.lightInk);
+  root.setProperty("--poster-header-night", opt.dark);
+  root.setProperty("--poster-header-night-ink", opt.darkInk);
+  document.documentElement.dataset.palette = id;
+}
+
+let currentPaletteId = getSavedPaletteId();
+applyPalette(currentPaletteId);
+
+function renderCustomizePanel() {
+  const swatchesEl = document.getElementById("paletteSwatches");
+  swatchesEl.innerHTML = PALETTE_OPTIONS.map(p => `
+    <button class="palette-swatch ${p.id === currentPaletteId ? 'selected' : ''}"
+      style="background:${p.light}" data-palette-id="${p.id}"
+      aria-label="${p.label}" title="${p.label}"></button>
+  `).join("");
+  swatchesEl.querySelectorAll(".palette-swatch").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentPaletteId = btn.dataset.paletteId;
+      applyPalette(currentPaletteId);
+      savePaletteId(currentPaletteId);
+      renderCustomizePanel();
+    });
+  });
+
+  const classes = getAllClasses();
+  const listEl = document.getElementById("classColorList");
+  if (classes.length === 0) {
+    listEl.innerHTML = `<div class="class-color-empty">Add a syllabus to set class colors.</div>`;
+    return;
+  }
+  listEl.innerHTML = classes.map(cls => `
+    <div class="class-color-row">
+      <span class="ccr-name">${cls}</span>
+      <input type="color" value="${getClassColor(cls)}" data-class="${cls.replace(/"/g, '&quot;')}">
+    </div>
+  `).join("");
+  listEl.querySelectorAll('input[type="color"]').forEach(input => {
+    input.addEventListener("input", () => {
+      classColorOverrides[input.dataset.class] = input.value;
+      saveClassColorOverrides();
+      render();
+    });
+  });
+}
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const customizePanel = document.getElementById("customizePanel");
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const isOpen = customizePanel.classList.toggle("open");
+  hamburgerBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+});
+document.addEventListener("click", (e) => {
+  if (!customizePanel.contains(e.target) && e.target !== hamburgerBtn) {
+    customizePanel.classList.remove("open");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+});
 
 render();
 
@@ -701,6 +485,65 @@ function tick() {
 
 /* ---- syllabus upload ---- */
 
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let text = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(" ") + "\n";
+  }
+  return text;
+}
+
+async function readOneFile(file) {
+  const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+  if (isPdf) {
+    if (!window.pdfjsLib) throw new Error("PDF reader didn't load");
+    return await extractPdfText(file);
+  }
+  return await file.text();
+}
+
+async function handleFiles(fileList) {
+  const files = Array.from(fileList);
+  if (files.length === 0) return;
+
+  modalStatus.innerHTML = `<div class="modal-status loading">Reading ${files.length} file${files.length > 1 ? "s" : ""}...</div>`;
+
+  const combined = [];
+  const failed = [];
+
+  for (const file of files) {
+    try {
+      const text = await readOneFile(file);
+      if (text && text.trim().length >= 20) {
+        combined.push(`--- ${file.name} ---\n${text.trim()}`);
+      } else {
+        failed.push(file.name);
+      }
+    } catch (e) {
+      failed.push(file.name);
+    }
+  }
+
+  if (combined.length === 0) {
+    modalStatus.innerHTML = `<div class="modal-status error">Couldn't find readable text in ${files.length > 1 ? "any of those files" : "that file"}. Try pasting the text instead.</div>`;
+    return;
+  }
+
+  const fullText = combined.join("\n\n");
+  syllabusInput.value = fullText;
+
+  const loadedNames = files.filter(f => !failed.includes(f.name)).map(f => f.name).join(", ");
+  let statusMsg = `Loaded ${combined.length} file${combined.length > 1 ? "s" : ""} (${loadedNames}) — ${fullText.length.toLocaleString()} characters total. Click Parse Syllabus to continue.`;
+  if (failed.length > 0) {
+    statusMsg += ` (Couldn't read: ${failed.join(", ")})`;
+  }
+  modalStatus.innerHTML = `<div class="modal-status">${statusMsg}</div>`;
+}
+
 // Replace this with your deployed Cloudflare Worker URL, e.g.
 // "https://syllabus-parser.yourname.workers.dev"
 const WORKER_URL = "PASTE_YOUR_WORKER_URL_HERE";
@@ -711,7 +554,24 @@ const modalStatus = document.getElementById("modalStatus");
 const previewList = document.getElementById("previewList");
 const confirmActions = document.getElementById("confirmActions");
 const parseBtn = document.getElementById("parseUploadBtn");
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
 let pendingAssignments = [];
+
+dropzone.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", () => {
+  if (fileInput.files.length > 0) handleFiles(fileInput.files);
+});
+dropzone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropzone.classList.add("dragover");
+});
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  if (e.dataTransfer.files.length > 0) handleFiles(e.dataTransfer.files);
+});
 
 function openModal() {
   uploadModal.classList.add("open");
@@ -721,6 +581,8 @@ function openModal() {
   confirmActions.style.display = "none";
   pendingAssignments = [];
   parseBtn.style.display = "block";
+  fileInput.value = "";
+  dropzone.classList.remove("dragover");
 }
 function closeModal() { uploadModal.classList.remove("open"); }
 
